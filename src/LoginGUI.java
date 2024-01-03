@@ -6,19 +6,14 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
-public class Overlay extends JFrame {
-    private String sql;
+
+public class LoginGUI extends JFrame {
     private String usernameTrue = "testuser";
     private String passwordTrue = "123";
     private Container pane = getContentPane();
-    private boolean loggedIn = false;
 
-    public Overlay() {
+    public LoginGUI() {
         setTitle("Die Knasti GmbH");
         setSize(1000, 500);
         setLocationRelativeTo(null);
@@ -39,10 +34,10 @@ public class Overlay extends JFrame {
         JLabel password = new JLabel("Password", SwingConstants.CENTER);
         password.setFont(new Font(Font.DIALOG, Font.BOLD, 22));
 
-        JTextField userField = new JTextField("test1@gmail.com", SwingConstants.CENTER);
+        JTextField userField = new JTextField("testuser", SwingConstants.CENTER);
         userField.setFont(new Font(Font.DIALOG, Font.PLAIN, 18));
 
-        JPasswordField passwordField = new JPasswordField(SwingConstants.CENTER);
+        JPasswordField passwordField = new JPasswordField("123",SwingConstants.CENTER);
         passwordField.setFont(new Font(Font.DIALOG, Font.PLAIN, 18));
 
         JButton loginButton = new JButton("LOGIN") {
@@ -51,9 +46,8 @@ public class Overlay extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (userField.getText().equals(usernameTrue) && passwordField.getText().equals(passwordTrue)) {
-                    loggedIn = true;
                     System.out.println("Logged in!");
-                    runNewWindow();
+                    runLoggedImWindow();
                     dispose();
                 } else {
                     System.out.println("wrong username or password!");
@@ -95,26 +89,7 @@ public class Overlay extends JFrame {
         }
     }
 
-    private void sqlRequest(String sql) {
-        try {
-            this.sql = sql;
-            //String sql = "select adresse from Firma where telephonnummer=9060624057";
-            String username = "DieKnastiGmbH";
-            String passwort = "DieKnastiGmbH";
-            String url = "jdbc:oracle:thin:@rs03-db-inf-min.ad.fh-bielefeld.de:1521:ORCL";
-            Connection con = DriverManager.getConnection(url, username, passwort);
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            rs.next();
-            String result = rs.getString(1);
-            System.out.println(result);
-            con.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void runNewWindow() {
+    public void runLoggedImWindow() {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {

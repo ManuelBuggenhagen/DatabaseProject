@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 
 public class MainGUI  {
@@ -6,8 +5,8 @@ public class MainGUI  {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                Overlay overlay = new Overlay();
-                overlay.setVisible(true);
+                LoginGUI loginGUI = new LoginGUI();
+                loginGUI.setVisible(true);
             }
         });
     }
