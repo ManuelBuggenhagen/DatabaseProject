@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class QueryGUI extends JFrame {
@@ -82,66 +83,57 @@ public class QueryGUI extends JFrame {
             ResultSet rs = st.executeQuery(sql);
 
 
-
-
-
             ResultSetMetaData rsmd = rs.getMetaData();
             int numberOfColumns = rsmd.getColumnCount();
-            int rowCount = 1;
+            int rowAmount = 1;
+
+            ArrayList<ArrayList<String>> list = new ArrayList<>();
+
+            for (int i = 0; i < 51; i++) {
+                list.add(new ArrayList<>());
+            }
+
+            for (int i = 1; i <numberOfColumns ; i++) {
+                list.getFirst().add(rsmd.getColumnName(i));
+            }
+
             while (rs.next()) {
-                System.out.println("Row " + rowCount + ":  ");
+
+                //list.add(new ArrayList<>());
+
+
                 for (int i = 1; i <= numberOfColumns; i++) {
-                    System.out.print(rsmd.getColumnName(i) + i + ":  ");
-                    System.out.println(rs.getString(i));
-
+                    list.get(rowAmount).add(rs.getString(i));
                 }
-                System.out.println("");
-                rowCount++;
-            }
-            String[][] table = new String[rowCount + 1][rsmd.getColumnCount()];
-            for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                table[0][i] =rsmd.getColumnName(i);
+                rowAmount++;
             }
 
-            rs.first();
-            int x=1;
-            while (rs.next()) {
-                for (int i = 1; i <= numberOfColumns; i++) {
-                    System.out.println(rs.getString(i));
-                    table[i][x]=rs.getString(i);
-
-                }
-                System.out.println("");
-                x++;
-            }
-
-
-
-
+            System.out.println("Rows: " + rowAmount);
+            System.out.println("Columns: " + numberOfColumns);
 
             st.close();
             con.close();
 
+            for (int i = list.size()-1; i > 1; i--) {
+                if (list.get(i).isEmpty()) {
+                    list.remove(i);
+                }
+            }
 
 
+            for (int i = 0; i < list.size(); i++) {
+                System.out.println(list.get(i));
+            }
+            System.out.println("List size: " + list.size());
 
-
-
-
-            /*
-            rs.next();
-            String result = rs.getString(1);
-            System.out.println(result);
-            con.close();
-            return result;
-
-             */
             return null;
-        } catch (Exception e) {
+
+        } catch (SQLException e) {
             System.out.println("fehler!");
             JOptionPane.showMessageDialog(getContentPane(), "Die SQL Abfrage war leider fehlerhaft", "error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return null;
     }
+
 }
