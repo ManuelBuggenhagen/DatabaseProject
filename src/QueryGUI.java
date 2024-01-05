@@ -12,23 +12,29 @@ import java.util.Objects;
 public class QueryGUI extends JFrame {
     Container pane = getContentPane();
     private String sql;
+    JLabel queryResult;
+    JScrollPane scrollPane;
+    JTable table;
+    JTextArea query;
+    JPanel subPanel1;
 
     public QueryGUI() {
         setTitle("Query");
-        setSize(1000, 700);
+        setSize(800, 1000);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 
-        JTextArea query = new JTextArea("select * from angebot");
+        query = new JTextArea("select * from angebot");
         query.setLineWrap(true);
         query.setWrapStyleWord(true);
         query.setCaretColor(Color.WHITE);
         query.setFont(query.getFont().deriveFont(20.0F));
         query.setForeground(Color.WHITE);
         query.setBackground(Color.BLACK);
-        JLabel queryResult = new JLabel("hier wird ihr Ergebnis stehen", SwingConstants.CENTER);
+        queryResult = new JLabel("hier wird ihr Ergebnis stehen", SwingConstants.CENTER);
         queryResult.setFont(queryResult.getFont().deriveFont(20.0F));
+        //scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 
         JButton run = new JButton("run");
@@ -45,7 +51,9 @@ public class QueryGUI extends JFrame {
         run.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                queryResult.setText(sendSQLRequest(query.getText()));
+                sendSQLRequest(query.getText());
+                subPanel1.add(scrollPane);
+                //subPanel1.setSize(1000,1000);
             }
         });
 
@@ -58,10 +66,10 @@ public class QueryGUI extends JFrame {
         subPanel2.add(new JLabel(""));
         subPanel2.add(new JLabel(""));
 
-        JPanel subPanel1 = new JPanel();
+        subPanel1 = new JPanel();
         subPanel1.setLayout(new GridLayout(2, 1));
         subPanel1.add(query);
-        subPanel1.add(queryResult);
+        //subPanel1.add(scrollPane);
 
 
         pane.setLayout(new BorderLayout(10, 10));
@@ -72,7 +80,7 @@ public class QueryGUI extends JFrame {
     }
 
 
-    private String sendSQLRequest(String sql) {
+    private void sendSQLRequest(String sql) {
         try {
             this.sql = sql;
             String username = "DieKnastiGmbH";
@@ -80,7 +88,7 @@ public class QueryGUI extends JFrame {
             String url = "jdbc:oracle:thin:@rs03-db-inf-min.ad.fh-bielefeld.de:1521:ORCL";
             Connection con = DriverManager.getConnection(url, username, passwort);
             Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
+            ResultSet rs = st.executeQuery(this.sql);
 
 
             ResultSetMetaData rsmd = rs.getMetaData();
@@ -93,15 +101,13 @@ public class QueryGUI extends JFrame {
                 list.add(new ArrayList<>());
             }
 
-            for (int i = 1; i <numberOfColumns ; i++) {
+            for (int i = 1; i <= numberOfColumns; i++) {
                 list.getFirst().add(rsmd.getColumnName(i));
             }
 
             while (rs.next()) {
 
                 //list.add(new ArrayList<>());
-
-
                 for (int i = 1; i <= numberOfColumns; i++) {
                     list.get(rowAmount).add(rs.getString(i));
                 }
@@ -114,26 +120,64 @@ public class QueryGUI extends JFrame {
             st.close();
             con.close();
 
-            for (int i = list.size()-1; i > 1; i--) {
+            for (int i = list.size() - 1; i > 1; i--) {
                 if (list.get(i).isEmpty()) {
                     list.remove(i);
                 }
             }
 
+            /*
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("<html>");
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = 0; j < list.get(i).size(); j++) {
+                    stringBuilder.append(list.get(i).get(j));
+                    stringBuilder.append("  ||  ");
+                }
+                stringBuilder.append("<br>");
+            }
+            stringBuilder.append("<html>");
+            queryResult.setText(stringBuilder.toString());
 
+             */
+
+
+
+            String[] columnNames = new String[numberOfColumns];
+            for (int i = 0; i < columnNames.length; i++) {
+                columnNames[i] = list.getFirst().get(i);
+            }
+
+            String[][] data = new String[rowAmount - 1][numberOfColumns];
+            for (int i = 1; i < data.length; i++) {
+                for (int j = 0; j < data[i].length; j++) {
+                    data[i][j] = list.get(i).get(j);
+                }
+            }
+
+            table = new JTable(data,columnNames);
+            table.setBounds(50,50,200,300);
+            scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+
+
+
+            /*
             for (int i = 0; i < list.size(); i++) {
                 System.out.println(list.get(i));
             }
             System.out.println("List size: " + list.size());
 
-            return null;
+             */
+
+
+
 
         } catch (SQLException e) {
             System.out.println("fehler!");
             JOptionPane.showMessageDialog(getContentPane(), "Die SQL Abfrage war leider fehlerhaft", "error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
-        return null;
     }
 
 }
