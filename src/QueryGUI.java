@@ -42,6 +42,7 @@ public class QueryGUI extends JFrame {
         run.setBackground(Color.LIGHT_GRAY);
         run.setForeground(Color.BLACK);
         run.setBorder(null);
+        final boolean[] hasBeenPressed = {false};
         try {
             Image img = ImageIO.read(new File("src/runButton.png"));
             run.setIcon(new ImageIcon(img));
@@ -51,9 +52,13 @@ public class QueryGUI extends JFrame {
         run.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (hasBeenPressed[0]){
+                    subPanel1.remove(scrollPane);
+                }
                 sendSQLRequest(query.getText());
                 subPanel1.add(scrollPane);
-                //subPanel1.setSize(1000,1000);
+                pack();
+                hasBeenPressed[0] =true;
             }
         });
 
@@ -69,7 +74,6 @@ public class QueryGUI extends JFrame {
         subPanel1 = new JPanel();
         subPanel1.setLayout(new GridLayout(2, 1));
         subPanel1.add(query);
-        //subPanel1.add(scrollPane);
 
 
         pane.setLayout(new BorderLayout(10, 10));
@@ -142,24 +146,21 @@ public class QueryGUI extends JFrame {
              */
 
 
-
             String[] columnNames = new String[numberOfColumns];
             for (int i = 0; i < columnNames.length; i++) {
                 columnNames[i] = list.getFirst().get(i);
             }
 
-            String[][] data = new String[rowAmount - 1][numberOfColumns];
+            String[][] data = new String[rowAmount][numberOfColumns];
             for (int i = 1; i < data.length; i++) {
                 for (int j = 0; j < data[i].length; j++) {
                     data[i][j] = list.get(i).get(j);
                 }
             }
 
-            table = new JTable(data,columnNames);
-            table.setBounds(50,50,200,300);
+            table = new JTable(data, columnNames);
+            table.setBounds(50, 50, 200, 300);
             scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-
 
 
             /*
@@ -169,8 +170,6 @@ public class QueryGUI extends JFrame {
             System.out.println("List size: " + list.size());
 
              */
-
-
 
 
         } catch (SQLException e) {

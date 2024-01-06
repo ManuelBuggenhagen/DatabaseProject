@@ -9,7 +9,7 @@ import java.io.IOException;
 
 
 public class LoginGUI extends JFrame {
-    private String usernameTrue = "testuser";
+    public String usernameTrue = "testuser";
     private String passwordTrue = "123";
     private Container pane = getContentPane();
 
@@ -93,7 +93,7 @@ public class LoginGUI extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                loggedInGUI newWindow = new loggedInGUI();
+                loggedInGUI newWindow = new loggedInGUI(usernameTrue);
                 newWindow.setVisible(true);
             }
         });
