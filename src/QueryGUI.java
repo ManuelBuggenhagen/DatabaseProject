@@ -52,13 +52,21 @@ public class QueryGUI extends JFrame {
         run.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (hasBeenPressed[0]){
+                if (hasBeenPressed[0]) {
                     subPanel1.remove(scrollPane);
                 }
-                sendSQLRequest(query.getText());
+                try {
+                    SQLRequest sqlRequest = new SQLRequest();
+                    scrollPane = sqlRequest.sendSQLRequest(query.getText());
+                } catch (SQLException ex) {
+                    System.out.println("fehler!");
+                    JOptionPane.showMessageDialog(getContentPane(), "Die SQL Abfrage war leider fehlerhaft", "error", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
+                //scrollPane = sendSQLRequest(query.getText());
                 subPanel1.add(scrollPane);
                 pack();
-                hasBeenPressed[0] =true;
+                hasBeenPressed[0] = true;
             }
         });
 
@@ -84,7 +92,9 @@ public class QueryGUI extends JFrame {
     }
 
 
-    private void sendSQLRequest(String sql) {
+
+    /*
+    private JScrollPane sendSQLRequest(String sql) {
         try {
             this.sql = sql;
             String username = "DieKnastiGmbH";
@@ -145,7 +155,7 @@ public class QueryGUI extends JFrame {
 
              */
 
-
+/*
             String[] columnNames = new String[numberOfColumns];
             for (int i = 0; i < columnNames.length; i++) {
                 columnNames[i] = list.getFirst().get(i);
@@ -160,16 +170,8 @@ public class QueryGUI extends JFrame {
 
             table = new JTable(data, columnNames);
             table.setBounds(50, 50, 200, 300);
-            scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
-
-            /*
-            for (int i = 0; i < list.size(); i++) {
-                System.out.println(list.get(i));
-            }
-            System.out.println("List size: " + list.size());
-
-             */
+            JScrollPane returnValue = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+            return returnValue;
 
 
         } catch (SQLException e) {
@@ -177,6 +179,10 @@ public class QueryGUI extends JFrame {
             JOptionPane.showMessageDialog(getContentPane(), "Die SQL Abfrage war leider fehlerhaft", "error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+        return null;
     }
+
+ */
+
 
 }

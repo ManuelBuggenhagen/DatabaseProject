@@ -1,13 +1,11 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class loggedInGUI extends JFrame implements ActionListener {
     private String sql;
@@ -15,7 +13,32 @@ public class loggedInGUI extends JFrame implements ActionListener {
     private JMenuItem aboutUs;
     private JMenuItem aGB;
     private JMenuItem executeQuery;
+
+    private JPanel middleSection;
+    private JButton angebot;
+    private JButton besucher;
+    private JButton besucherHistorie;
+    private JButton dienstleistungsVertrag;
+    private JButton finanzen;
+    private JButton firma;
+    private JButton gebaeudeTeil;
+    private JButton gefaengnis;
+    private JButton gegenstand;
+    private JButton insasse;
+    private JButton insassenHistorie;
+    private JButton mitarbeiter;
+    private JButton rechte;
+    private JButton rolle;
+    private JButton vertrag;
+    private JButton zelle;
+    private JButton zellenTyp;
+    private JButton zwischenfallHistorie;
+    private JPanel welcomePanel;
+    private JButton back;
+    private JPanel backPanel;
+    private JScrollPane tableShow;
     Container pane = getContentPane();
+    private String currentUser;
 
     public loggedInGUI(String user) {
 
@@ -24,6 +47,7 @@ public class loggedInGUI extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        this.currentUser = user;
 
         //Menübar
         JMenuBar menu = new JMenuBar();
@@ -46,7 +70,7 @@ public class loggedInGUI extends JFrame implements ActionListener {
         welcomeMessage.setText("<html>" + "Welcome back " + user + "<html>");
         welcomeMessage.setFont(welcomeMessage.getFont().deriveFont(30.0F));
         welcomeMessage.setSize(300, 300);
-        JPanel welcomePanel = new JPanel();
+        welcomePanel = new JPanel();
         welcomePanel.add(welcomeMessage);
         welcomePanel.setBackground(Color.lightGray);
 
@@ -61,160 +85,181 @@ public class loggedInGUI extends JFrame implements ActionListener {
         setJMenuBar(menu);
 
 
-        JPanel middleSection = new JPanel(new GridLayout(3, 6));
+        middleSection = new JPanel(new GridLayout(3, 6, 10, 10));
+        middleSection.setBackground(Color.lightGray);
 
         for (int i = 0; i < 18; i++) {
             switch (i) {
                 case 0:
-                    JButton angebot = new JButton("<html>" + "<br> Angebot: <br><br>" + "ID: number<br> " + "Bezeichnung: Varchar2<br>"
-                            + "Beschreibung: Clob<br>" + "Kategorie: Varchar2" + "<html>");
+                    angebot = new JButton("<html>" + "<br><&nbsp Angebot: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Bezeichnung: Varchar2<br>" + "<&nbsp Beschreibung: Clob<br>"
+                            + "<&nbsp Kategorie: Varchar2" + "<html>");
                     angebot.setFont(angebot.getFont().deriveFont(20.0F));
                     angebot.setHorizontalAlignment(SwingConstants.LEFT);
                     angebot.setVerticalAlignment(SwingConstants.TOP);
+                    angebot.setBounds(30, 30, 30, 30);
+                    angebot.addActionListener(this);
                     middleSection.add(angebot);
                     break;
                 case 1:
-                    JButton besucher = new JButton("<html>" + "<br> Besucher: <br><br>" + "ID: number<br> "
-                            + "Vorname: Varcher2<br>" + "Nachname: Varcher2<br>" + "Geburtsdatum: Date<br>"
-                            + "Geschlecht: Varcher2<br>" + "Wohnort: Varchar2<br>" + "<html>");
+                    besucher = new JButton("<html>" + "<br><&nbsp Besucher: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Vorname: Varcher2<br>" + "<&nbsp Nachname: Varcher2<br>" + "<&nbsp Geburtsdatum: Date<br>"
+                            + "<&nbsp Geschlecht: Varcher2<br>" + "<&nbsp Wohnort: Varchar2<br>" + "<html>");
                     besucher.setFont(besucher.getFont().deriveFont(20.0F));
                     besucher.setHorizontalAlignment(SwingConstants.LEFT);
                     besucher.setVerticalAlignment(SwingConstants.TOP);
+                    besucher.addActionListener(this);
                     middleSection.add(besucher);
                     break;
                 case 2:
-                    JButton besucherHistorie = new JButton("<html>" + "<br> Besucherhistorie: <br><br>" + "ID: number<br> "
-                            + "Bes_ID: Number<br>" + "Datum: Date<br>" + "Notiz: Clob<br>" + "Besuchergrund: Varcher2" + "<html>");
+                    besucherHistorie = new JButton("<html>" + "<br><&nbsp Besucherhistorie: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Bes_ID: Number<br>" + "<&nbsp Datum: Date<br>" + "<&nbsp Notiz: Clob<br>" + "<&nbsp Besuchergrund: Varcher2" + "<html>");
                     besucherHistorie.setFont(besucherHistorie.getFont().deriveFont(20.0F));
                     besucherHistorie.setHorizontalAlignment(SwingConstants.LEFT);
                     besucherHistorie.setVerticalAlignment(SwingConstants.TOP);
+                    besucherHistorie.addActionListener(this);
                     middleSection.add(besucherHistorie);
                     break;
                 case 3:
-                    JButton dienstleistungsVertrag = new JButton("<html>" + "<br> Dienstleistungsvertrag: <br><br>" + "ID: number<br> "
-                            + "Fir_ID: Number<br>" + "Beginn: Date<br>" + "Ende: Date<br>" + "Notiz: Clob<br>" + "Import_Export: Varchar2<br>" + "<html>");
+                    dienstleistungsVertrag = new JButton("<html>" + "<br><&nbsp Dienstleistungsvertrag: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Fir_ID: Number<br>" + "<&nbsp Beginn: Date<br>" + "<&nbsp Ende: Date<br>" + "<&nbsp Notiz: Clob<br>" + "<&nbsp Import_Export: Varchar2<br>" + "<html>");
                     dienstleistungsVertrag.setFont(dienstleistungsVertrag.getFont().deriveFont(20.0F));
                     dienstleistungsVertrag.setHorizontalAlignment(SwingConstants.LEFT);
                     dienstleistungsVertrag.setVerticalAlignment(SwingConstants.TOP);
+                    dienstleistungsVertrag.addActionListener(this);
                     middleSection.add(dienstleistungsVertrag);
                     break;
                 case 4:
-                    JButton finanzen = new JButton("<html>" + "<br> Finanzen: <br><br>" + "ID: number<br> "
-                            + "Gef_ID: number<br>" + "Die_ID: number<br>" + "Jahr: Number<br>" + "Budget: Float<br>"
-                            + "Ausgaben: Float<br>" + "Einnahmen: Float<br>" + "Sonstiges: Float<br>" + "<html>");
+                    finanzen = new JButton("<html>" + "<br><&nbsp Finanzen: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Gef_ID: number<br>" + "<&nbsp Die_ID: number<br>" + "<&nbsp Jahr: Number<br>" + "<&nbsp Budget: Float<br>"
+                            + "<&nbsp Ausgaben: Float<br>" + "<&nbsp Einnahmen: Float<br>" + "<&nbsp Sonstiges: Float<br>" + "<html>");
                     finanzen.setFont(finanzen.getFont().deriveFont(20.0F));
                     finanzen.setHorizontalAlignment(SwingConstants.LEFT);
                     finanzen.setVerticalAlignment(SwingConstants.TOP);
+                    finanzen.addActionListener(this);
                     middleSection.add(finanzen);
                     break;
                 case 5:
-                    JButton firma = new JButton("<html>" + "<br> Firma: <br><br>" + "ID: number<br> "
-                            + "Firmenname: Varchar2<br>" + "Adresse: Varcher2<br>" + "Telephonnummer: Number<br>" + "Email: Varcher2<br>"
-                            + "Notiz: Clob<br>" + "AnsprechpartnerVorname: Varchar2<br>" + "AnsprechpartnerNachname: Varchar2<br>" + "<html>");
+                    firma = new JButton("<html>" + "<br><&nbsp Firma: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Firmenname: Varchar2<br>" + "<&nbsp Adresse: Varcher2<br>" + "<&nbsp Telephonnummer: Number<br>" + "<&nbsp Email: Varcher2<br>"
+                            + "<&nbsp Notiz: Clob<br>" + "<&nbsp AnsprechpartnerVM: Varchar2<br>" + "<&nbsp AnsprechpartnerNM: Varchar2<br>" + "<html>");
                     firma.setFont(firma.getFont().deriveFont(20.0F));
                     firma.setHorizontalAlignment(SwingConstants.LEFT);
                     firma.setVerticalAlignment(SwingConstants.TOP);
+                    firma.addActionListener(this);
                     middleSection.add(firma);
                     break;
                 case 6:
-                    JButton gebaeudeTeil = new JButton("<html>" + "<br> Gebäudeteil: <br><br>" + "ID: number<br> "
-                            + "Gef_ID: Number<br>" + "Fläche: Number<br>" + "Bezeichnung: Varcher2<br>" + "Zellenanzahl: Number" + "<html>");
+                    gebaeudeTeil = new JButton("<html>" + "<br><&nbsp Gebäudeteil: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Gef_ID: Number<br>" + "<&nbsp Fläche: Number<br>" + "<&nbsp Bezeichnung: Varcher2<br>" + "<&nbsp Zellenanzahl: Number" + "<html>");
                     gebaeudeTeil.setFont(gebaeudeTeil.getFont().deriveFont(20.0F));
                     gebaeudeTeil.setHorizontalAlignment(SwingConstants.LEFT);
                     gebaeudeTeil.setVerticalAlignment(SwingConstants.TOP);
+                    gebaeudeTeil.addActionListener(this);
                     middleSection.add(gebaeudeTeil);
                     break;
                 case 7:
-                    JButton gefaengnis = new JButton("<html>" + "<br> Gefängnis: <br><br>" + "ID: number<br> "
-                            + "Adresse: Varchar2<br>" + "Standort: Varcher2<br>" + "Name: Varchar2" + "<html>");
+                    gefaengnis = new JButton("<html>" + "<br><&nbsp Gefängnis: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Adresse: Varchar2<br>" + "<&nbsp Standort: Varcher2<br>" + "<&nbsp Name: Varchar2" + "<html>");
                     gefaengnis.setFont(gefaengnis.getFont().deriveFont(20.0F));
                     gefaengnis.setHorizontalAlignment(SwingConstants.LEFT);
                     gefaengnis.setVerticalAlignment(SwingConstants.TOP);
+                    gefaengnis.addActionListener(this);
                     middleSection.add(gefaengnis);
                     break;
                 case 8:
-                    JButton gegenstand = new JButton("<html>" + "<br> Gegenstand: <br><br>" + "ID: number<br> "
-                            + "Bezeichnung: Varchar2<br>" + "Beschreibung: Clob<br>" + "<html>");
+                    gegenstand = new JButton("<html>" + "<br><&nbsp Gegenstand: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Bezeichnung: Varchar2<br>" + "<&nbsp Beschreibung: Clob<br>" + "<html>");
                     gegenstand.setFont(gegenstand.getFont().deriveFont(20.0F));
                     gegenstand.setHorizontalAlignment(SwingConstants.LEFT);
                     gegenstand.setVerticalAlignment(SwingConstants.TOP);
+                    gegenstand.addActionListener(this);
                     middleSection.add(gegenstand);
                     break;
                 case 9:
-                    JButton insasse = new JButton("<html>" + "<br> Insasse: <br><br>" + "ID: number<br> "
-                            + "Vorname: Varchar2<br>" + "Nachname: Varchar2<br>" + "Inhaftierung: Date<br>" + "Entlassung: Date<br>"
-                            + "Geschlecht: Varchar2<br>" + "Geburtsdatum: Date<br>" + "letzter_Wohnort: Varcher2<br>" + "Notiz: Clob<br>"
-                            + "Sicherheitsstufe: Varchar2" + "<html>");
+                    insasse = new JButton("<html>" + "<br><&nbsp Insasse: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Vorname: Varchar2<br>" + "<&nbsp Nachname: Varchar2<br>" + "<&nbsp Inhaftierung: Date<br>" + "<&nbsp Entlassung: Date<br>"
+                            + "<&nbsp Geschlecht: Varchar2<br>" + "<&nbsp Geburtsdatum: Date<br>" + "<&nbsp letzter_Wohnort: Varcher2<br>" + "<&nbsp Notiz: Clob<br>"
+                            + "<&nbsp Sicherheitsstufe: Varchar2" + "<html>");
                     insasse.setFont(insasse.getFont().deriveFont(20.0F));
                     insasse.setHorizontalAlignment(SwingConstants.LEFT);
                     insasse.setVerticalAlignment(SwingConstants.TOP);
+                    insasse.addActionListener(this);
                     middleSection.add(insasse);
                     break;
                 case 10:
-                    JButton insassenHistorie = new JButton("<html>" + "<br> Insassenhistorie: <br><br>" + "ID: number<br> "
-                            + "Ins_ID: Number<br>" + "Zel_ID: Number<br>" + "Datum: Date<br>" + "Notiz: Clob" + "<html>");
+                    insassenHistorie = new JButton("<html>" + "<br><&nbsp Insassenhistorie: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Ins_ID: Number<br>" + "<&nbsp Zel_ID: Number<br>" + "<&nbsp Datum: Date<br>" + "<&nbsp Notiz: Clob" + "<html>");
                     insassenHistorie.setFont(insassenHistorie.getFont().deriveFont(20.0F));
                     insassenHistorie.setHorizontalAlignment(SwingConstants.LEFT);
                     insassenHistorie.setVerticalAlignment(SwingConstants.TOP);
+                    insassenHistorie.addActionListener(this);
                     middleSection.add(insassenHistorie);
                     break;
                 case 11:
-                    JButton mitarbeiter = new JButton("<html>" + "<br> Mitarbeiter: <br><br>" + "ID: number<br> "
-                            + "Mit_ID: Number<br>" + "Gef_ID: Number<br>" + "Vorname: Varcher2<br>" + "Nachname: Varcher2<br>"
-                            + "Wohnort: Varcher2<br>" + "Geburtsdatum: Date<br>" + "Gehalt: Float<br>" + "Geschlecht: Varchar2" + "<html>");
+                    mitarbeiter = new JButton("<html>" + "<br><&nbsp Mitarbeiter: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Mit_ID: Number<br>" + "<&nbsp Gef_ID: Number<br>" + "<&nbsp Vorname: Varcher2<br>" + "<&nbsp Nachname: Varcher2<br>"
+                            + "<&nbsp Wohnort: Varcher2<br>" + "<&nbsp Geburtsdatum: Date<br>" + "<&nbsp Gehalt: Float<br>" + "<&nbsp Geschlecht: Varchar2" + "<html>");
                     mitarbeiter.setFont(mitarbeiter.getFont().deriveFont(20.0F));
                     mitarbeiter.setHorizontalAlignment(SwingConstants.LEFT);
                     mitarbeiter.setVerticalAlignment(SwingConstants.TOP);
+                    mitarbeiter.addActionListener(this);
                     middleSection.add(mitarbeiter);
                     break;
                 case 12:
-                    JButton rechte = new JButton("<html>" + "<br>  Rechte: <br><br>" + "ID: number<br> "
-                            + "Bezeichnung: Varchar2<br>" + "Beschreibung: Clob<br>" + "<html>");
+                    rechte = new JButton("<html>" + "<br><&nbsp  Rechte: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Bezeichnung: Varchar2<br>" + "<&nbsp Beschreibung: Clob<br>" + "<html>");
                     rechte.setFont(rechte.getFont().deriveFont(20.0F));
                     rechte.setHorizontalAlignment(SwingConstants.LEFT);
                     rechte.setVerticalAlignment(SwingConstants.TOP);
+                    rechte.addActionListener(this);
                     middleSection.add(rechte);
                     break;
                 case 13:
-                    JButton rolle = new JButton("<html>" + "<br> Rolle: <br><br>" + "ID: number<br> "
-                            + "Bezeichnung: Varchar2<br>" + "Beschreibung: Clob<br>" + "<html>");
+                    rolle = new JButton("<html>" + "<br><&nbsp Rolle: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Bezeichnung: Varchar2<br>" + "<&nbsp Beschreibung: Clob<br>" + "<html>");
                     rolle.setFont(rolle.getFont().deriveFont(20.0F));
                     rolle.setHorizontalAlignment(SwingConstants.LEFT);
                     rolle.setVerticalAlignment(SwingConstants.TOP);
+                    rolle.addActionListener(this);
                     middleSection.add(rolle);
                     break;
                 case 14:
-                    JButton vertrag = new JButton("<html>" + "<br> Vertrag: <br><br>" + "ID: number<br> " + "Ang_ID: number<br> "
-                            + "Ins_ID: number<br>" + "Bezeichnung: Varchar2<br>" + "Beginn: Date<br>" + "Ende: Date<br>"
-                            + "Vergütung: Float<br>" + "Notiz: Clob" + "<html>");
+                    vertrag = new JButton("<html>" + "<br><&nbsp Vertrag: <br><br>" + "<&nbsp ID: number<br> " + "<&nbsp Ang_ID: number<br> "
+                            + "<&nbsp Ins_ID: number<br>" + "<&nbsp Bezeichnung: Varchar2<br>" + "<&nbsp Beginn: Date<br>" + "<&nbsp Ende: Date<br>"
+                            + "<&nbsp Vergütung: Float<br>" + "<&nbsp Notiz: Clob" + "<html>");
                     vertrag.setFont(vertrag.getFont().deriveFont(20.0F));
                     vertrag.setHorizontalAlignment(SwingConstants.LEFT);
                     vertrag.setVerticalAlignment(SwingConstants.TOP);
+                    vertrag.addActionListener(this);
                     middleSection.add(vertrag);
                     break;
                 case 15:
-                    JButton zelle = new JButton("<html>" + "<br> Zelle: <br><br>" + "ID: number<br> " + "Gef_ID: number<br> "
-                            + "Zel_ID: number<br>" + "freie_Plätze: Number<br>" + "Plätze: Number<br>" + "Nummer: Nummer<br>"
-                            + "Fläche: Number<br>" + "Sicherheitsstufe: Varchar2" + "<html>");
+                    zelle = new JButton("<html>" + "<br><&nbsp Zelle: <br><br>" + "<&nbsp ID: number<br> " + "<&nbsp Gef_ID: number<br> "
+                            + "<&nbsp Zel_ID: number<br>" + "<&nbsp freie_Plätze: Number<br>" + "<&nbsp Plätze: Number<br>" + "<&nbsp Nummer: Nummer<br>"
+                            + "<&nbsp Fläche: Number<br>" + "<&nbsp Sicherheitsstufe: Varchar2" + "<html>");
                     zelle.setFont(zelle.getFont().deriveFont(20.0F));
                     zelle.setHorizontalAlignment(SwingConstants.LEFT);
                     zelle.setVerticalAlignment(SwingConstants.TOP);
+                    zelle.addActionListener(this);
                     middleSection.add(zelle);
                     break;
                 case 16:
-                    JButton zellenTyp = new JButton("<html>" + "<br> Zellentyp: <br><br>" + "ID: number<br> " + "Bezeichnung: Varchar2<br>"
-                            + "Beschreibung: Clob<br>" + "<html>");
+                    zellenTyp = new JButton("<html>" + "<br><&nbsp Zellentyp: <br><br>" + "<&nbsp ID: number<br> " + "<&nbsp Bezeichnung: Varchar2<br>"
+                            + "<&nbsp Beschreibung: Clob<br>" + "<html>");
                     zellenTyp.setFont(zellenTyp.getFont().deriveFont(20.0F));
                     zellenTyp.setHorizontalAlignment(SwingConstants.LEFT);
                     zellenTyp.setVerticalAlignment(SwingConstants.TOP);
+                    zellenTyp.addActionListener(this);
                     middleSection.add(zellenTyp);
                     break;
                 case 17:
-                    JButton zwischenfallHistorie = new JButton("<html>" + "<br> Zwischenfallhistorie: <br><br>" + "ID: number<br> "
-                            + "Ins_ID: Number<br>" + "Notiz: Clob<br>" + "Datum: Date<br>" + "Verstoß: Varchar2<br>" + "<html>");
+                    zwischenfallHistorie = new JButton("<html>" + "<br><&nbsp Zwischenfallhistorie: <br><br>" + "<&nbsp ID: number<br> "
+                            + "<&nbsp Ins_ID: Number<br>" + "<&nbsp Notiz: Clob<br>" + "<&nbsp Datum: Date<br>" + "<&nbsp Verstoß: Varchar2<br>" + "<html>");
                     zwischenfallHistorie.setFont(zwischenfallHistorie.getFont().deriveFont(20.0F));
                     zwischenfallHistorie.setHorizontalAlignment(SwingConstants.LEFT);
                     zwischenfallHistorie.setVerticalAlignment(SwingConstants.TOP);
+                    zwischenfallHistorie.addActionListener(this);
                     middleSection.add(zwischenfallHistorie);
                     break;
 
@@ -223,7 +268,6 @@ public class loggedInGUI extends JFrame implements ActionListener {
 
             }
         }
-
         pane.setLayout(new BorderLayout());
         pane.add(welcomePanel, BorderLayout.NORTH);
         pane.add(middleSection, BorderLayout.CENTER);
@@ -263,11 +307,72 @@ public class loggedInGUI extends JFrame implements ActionListener {
 
         } else if (e.getSource() == executeQuery) {
             runQueryWindow();
-        }
 
+        } else if (e.getSource() == back) {
+            System.out.println("backButton");
+            backPanel.setVisible(false);
+            welcomePanel.setVisible(true);
+            tableShow.setVisible(false);
+            middleSection.setVisible(true);
+
+        } else if (e.getSource() == angebot) {
+            openTable("angebot");
+
+        } else if (e.getSource() == besucher) {
+            openTable("besucher");
+
+        } else if (e.getSource() == besucherHistorie) {
+            openTable("besucherhistorie");
+
+        } else if (e.getSource() == dienstleistungsVertrag) {
+            openTable("dienstleistungsvertrag");
+
+        } else if (e.getSource() == finanzen) {
+            openTable("finanzen");
+
+        } else if (e.getSource() == firma) {
+            openTable("firma");
+
+        } else if (e.getSource() == gebaeudeTeil) {
+            openTable("gebaudeteil");
+
+        } else if (e.getSource() == gefaengnis) {
+            openTable("gefangnis");
+
+        } else if (e.getSource() == gegenstand) {
+            openTable("gegenstand");
+
+        } else if (e.getSource() == insasse) {
+            openTable("insasse");
+
+        } else if (e.getSource() == insassenHistorie) {
+            openTable("insassenhistorie");
+
+        } else if (e.getSource() == mitarbeiter) {
+            openTable("mitarbeiter");
+
+        } else if (e.getSource() == rechte) {
+            openTable("rechte");
+
+        } else if (e.getSource() == rolle) {
+            openTable("rolle");
+
+        } else if (e.getSource() == vertrag) {
+            openTable("vertrag");
+
+        } else if (e.getSource() == zelle) {
+            openTable("zelle");
+
+        } else if (e.getSource() == zellenTyp) {
+            openTable("zellentyp");
+
+        } else if (e.getSource() == zwischenfallHistorie) {
+            openTable("zwischenfallhistorie");
+
+        }
     }
 
-    public void runQueryWindow() {
+    private void runQueryWindow() {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -275,5 +380,42 @@ public class loggedInGUI extends JFrame implements ActionListener {
                 queryWindow.setVisible(true);
             }
         });
+    }
+
+    private void openTable(String table) {
+        try {
+            welcomePanel.setVisible(false);
+            back = new JButton();
+            back.addActionListener(this);
+            try {
+                Image img = ImageIO.read(new File("src/go-back.png"));
+                Image smaller = img.getScaledInstance(50, 50, Image.SCALE_DEFAULT);
+                back.setIcon(new ImageIcon(smaller));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            backPanel = new JPanel();
+            backPanel.setLayout(new GridLayout(1, 6));
+            backPanel.setBackground(Color.WHITE);
+            backPanel.add(new JLabel(""));
+            backPanel.add(new JLabel(""));
+            backPanel.add(back);
+            backPanel.add(new JLabel(""));
+            backPanel.add(new JLabel(""));
+
+
+            pane.add(backPanel, BorderLayout.NORTH);
+            middleSection.setVisible(false);
+            tableShow = new SQLRequest().sendSQLRequest("select * from " + table);
+            pane.add(tableShow);
+
+        } catch (SQLException e) {
+            System.out.println("fehler!");
+            JOptionPane.showMessageDialog(getContentPane(), "Die SQL Abfrage war leider fehlerhaft", "error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+
+
     }
 }
