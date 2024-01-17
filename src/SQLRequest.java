@@ -21,7 +21,7 @@ public class SQLRequest {
 
         ArrayList<ArrayList<String>> list = new ArrayList<>();
 
-        for (int i = 0; i < 51; i++) {
+        for (int i = 0; i < 100; i++) {
             list.add(new ArrayList<>());
         }
 

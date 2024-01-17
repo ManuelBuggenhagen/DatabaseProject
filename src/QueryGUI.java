@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class QueryGUI extends JFrame {
+public class QueryGUI extends JFrame implements ActionListener {
     Container pane = getContentPane();
     private String sql;
     JLabel queryResult;
@@ -17,6 +17,20 @@ public class QueryGUI extends JFrame {
     JTable table;
     JTextArea query;
     JPanel subPanel1;
+    JPanel subPanel3;
+    JButton run;
+    boolean hasBeenPressed = false;
+    JButton sql1;
+    JButton sql2;
+    JButton sql3;
+    JButton sql4;
+    JButton sql5;
+    JButton sql6;
+    JButton sql7;
+    JButton sql8;
+    JButton sql9;
+    JButton sql10;
+
 
     public QueryGUI() {
         setTitle("Query");
@@ -37,38 +51,89 @@ public class QueryGUI extends JFrame {
         //scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 
-        JButton run = new JButton("run");
+        run = new JButton("run");
         run.setMargin(new Insets(0, 0, 0, 0));
         run.setBackground(Color.LIGHT_GRAY);
         run.setForeground(Color.BLACK);
         run.setBorder(null);
-        final boolean[] hasBeenPressed = {false};
+
+        //final boolean[] hasBeenPressed = {false};
         try {
             Image img = ImageIO.read(new File("src/runButton.png"));
             run.setIcon(new ImageIcon(img));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        run.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (hasBeenPressed[0]) {
-                    subPanel1.remove(scrollPane);
-                }
-                try {
-                    SQLRequest sqlRequest = new SQLRequest();
-                    scrollPane = sqlRequest.sendSQLRequest(query.getText());
-                } catch (SQLException ex) {
-                    System.out.println("fehler!");
-                    JOptionPane.showMessageDialog(getContentPane(), "Die SQL Abfrage war leider fehlerhaft", "error", JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
-                }
-                //scrollPane = sendSQLRequest(query.getText());
-                subPanel1.add(scrollPane);
-                pack();
-                hasBeenPressed[0] = true;
+        run.addActionListener(this);
+
+
+        subPanel3 = new JPanel();
+        subPanel3.setLayout(new GridLayout(11, 1));
+        subPanel3.setSize(200,200);
+        subPanel3.setPreferredSize(new Dimension(200,500));
+
+        for (int i = 0; i < 11; i++) {
+            switch (i) {
+                case 0:
+                    JLabel info = new JLabel("beliebte Suchanfragen: ");
+                    info.setFont(info.getFont().deriveFont(15.0F));
+                    info.setHorizontalAlignment(SwingConstants.CENTER);
+                    subPanel3.add(info);
+                    break;
+                case 1:
+                    sql1 = new JButton("häufigste Zwischenfälle");
+                    sql1.addActionListener(this);
+                    subPanel3.add(sql1);
+                    break;
+                case 2:
+                    sql2 = new JButton("Liste aller Insassen in einem Gefängnis");
+                    sql2.addActionListener(this);
+                    subPanel3.add(sql2);
+                    break;
+                case 3:
+                    sql3 = new JButton("3");
+                    sql3.addActionListener(this);
+                    subPanel3.add(sql3);
+                    break;
+                case 4:
+                    sql4 = new JButton("4");
+                    sql4.addActionListener(this);
+                    subPanel3.add(sql4);
+                    break;
+                case 5:
+                    sql5 = new JButton("5");
+                    sql5.addActionListener(this);
+                    subPanel3.add(sql5);
+                    break;
+                case 6:
+                    sql6 = new JButton("6");
+                    sql6.addActionListener(this);
+                    subPanel3.add(sql6);
+                    break;
+                case 7:
+                    sql7 = new JButton("7");
+                    sql7.addActionListener(this);
+                    subPanel3.add(sql7);
+                    break;
+                case 8:
+                    sql8 = new JButton("8");
+                    sql8.addActionListener(this);
+                    subPanel3.add(sql8);
+                    break;
+                case 9:
+                    sql9 = new JButton("9");
+                    sql9.addActionListener(this);
+                    subPanel3.add(sql9);
+                    break;
+                case 10:
+                    sql10 = new JButton("10");
+                    sql10.addActionListener(this);
+                    subPanel3.add(sql10);
+                    break;
+                default:
+                    break;
             }
-        });
+        }
 
         JPanel subPanel2 = new JPanel();
         subPanel2.setLayout(new GridLayout(1, 6));
@@ -87,102 +152,73 @@ public class QueryGUI extends JFrame {
         pane.setLayout(new BorderLayout(10, 10));
         pane.add(subPanel2, BorderLayout.NORTH);
         pane.add(subPanel1, BorderLayout.CENTER);
+        pane.add(subPanel3, BorderLayout.WEST);
+        pane.setBackground(Color.black);
 
 
     }
 
-
-
-    /*
-    private JScrollPane sendSQLRequest(String sql) {
-        try {
-            this.sql = sql;
-            String username = "DieKnastiGmbH";
-            String passwort = "DieKnastiGmbH";
-            String url = "jdbc:oracle:thin:@rs03-db-inf-min.ad.fh-bielefeld.de:1521:ORCL";
-            Connection con = DriverManager.getConnection(url, username, passwort);
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(this.sql);
-
-
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int numberOfColumns = rsmd.getColumnCount();
-            int rowAmount = 1;
-
-            ArrayList<ArrayList<String>> list = new ArrayList<>();
-
-            for (int i = 0; i < 51; i++) {
-                list.add(new ArrayList<>());
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == run) {
+            if (hasBeenPressed) {
+                subPanel1.remove(scrollPane);
             }
-
-            for (int i = 1; i <= numberOfColumns; i++) {
-                list.getFirst().add(rsmd.getColumnName(i));
+            try {
+                SQLRequest sqlRequest = new SQLRequest();
+                scrollPane = sqlRequest.sendSQLRequest(query.getText());
+            } catch (SQLException ex) {
+                System.out.println("fehler!");
+                JOptionPane.showMessageDialog(getContentPane(), "Die SQL Abfrage war leider fehlerhaft", "error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
             }
+            subPanel1.add(scrollPane);
+            pack();
+            hasBeenPressed = true;
 
-            while (rs.next()) {
+        } else if (e.getSource() == sql1) {
+            query.setText("select a.versto_ as Verstoß  , COUNT(a.versto_) as Number_of_incidents  \n" +
+                    "     from zwischenfallhistorie a group by versto_ order by Number_of_incidents DESC\n");
 
-                //list.add(new ArrayList<>());
-                for (int i = 1; i <= numberOfColumns; i++) {
-                    list.get(rowAmount).add(rs.getString(i));
-                }
-                rowAmount++;
-            }
+        } else if (e.getSource() == sql2) {
+            query.setText("SELECT * FROM(\n" +
+                    "SELECT INSASSE.ID, INSASSE.VORNAME, INSASSE.NACHNAME, MAX(INSASSENHISTORIE.DATUM) AS DATUM, INSASSENHISTORIE.ZEL_ID, ROW_NUMBER() OVER (PARTITION BY INSASSE.ID \n" +
+                    "ORDER BY INSASSENHISTORIE.DATUM DESC) AS RANG\n" +
+                    "FROM\n" +
+                    "INSASSENHISTORIE\n" +
+                    "LEFT OUTER JOIN INSASSE ON INSASSE.ID = INSASSENHISTORIE.INS_ID \n" +
+                    "LEFT OUTER JOIN ZELLE on INSASSENHISTORIE.ZEL_ID = ZELLE.ID\n" +
+                    "LEFT OUTER JOIN GEFANGNIS ON ZELLE.GEF_ID = GEFANGNIS.ID\n" +
+                    "WHERE GEFANGNIS.NAME =  'Justizvollzugsanstallt Hameln' OR INSASSENHISTORIE.ZEL_ID IS NULL\n" +
+                    "GROUP BY INSASSE.ID, INSASSE.VORNAME, INSASSE.NACHNAME, INSASSENHISTORIE.DATUM, INSASSENHISTORIE.ZEL_ID\n" +
+                    "ORDER BY INSASSE.ID");
 
-            System.out.println("Rows: " + rowAmount);
-            System.out.println("Columns: " + numberOfColumns);
+        } else if (e.getSource() == sql3) {
+            query.setText("dfd");
 
-            st.close();
-            con.close();
+        } else if (e.getSource() == sql4) {
+            query.setText("dfd");
 
-            for (int i = list.size() - 1; i > 1; i--) {
-                if (list.get(i).isEmpty()) {
-                    list.remove(i);
-                }
-            }
+        } else if (e.getSource() == sql5) {
+            query.setText("dfd");
 
-            /*
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("<html>");
-            for (int i = 0; i < list.size(); i++) {
-                for (int j = 0; j < list.get(i).size(); j++) {
-                    stringBuilder.append(list.get(i).get(j));
-                    stringBuilder.append("  ||  ");
-                }
-                stringBuilder.append("<br>");
-            }
-            stringBuilder.append("<html>");
-            queryResult.setText(stringBuilder.toString());
+        } else if (e.getSource() == sql6) {
+            query.setText("dfd");
 
-             */
+        } else if (e.getSource() == sql7) {
+            query.setText("dfd");
 
-/*
-            String[] columnNames = new String[numberOfColumns];
-            for (int i = 0; i < columnNames.length; i++) {
-                columnNames[i] = list.getFirst().get(i);
-            }
+        } else if (e.getSource() == sql8) {
+            query.setText("dfd");
 
-            String[][] data = new String[rowAmount][numberOfColumns];
-            for (int i = 1; i < data.length; i++) {
-                for (int j = 0; j < data[i].length; j++) {
-                    data[i][j] = list.get(i).get(j);
-                }
-            }
+        } else if (e.getSource() == sql9) {
+            query.setText("dfd");
 
-            table = new JTable(data, columnNames);
-            table.setBounds(50, 50, 200, 300);
-            JScrollPane returnValue = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-            return returnValue;
+        } else if (e.getSource() == sql10) {
+            query.setText("dfd");
 
-
-        } catch (SQLException e) {
-            System.out.println("fehler!");
-            JOptionPane.showMessageDialog(getContentPane(), "Die SQL Abfrage war leider fehlerhaft", "error", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
         }
-        return null;
+
     }
-
- */
-
 
 }

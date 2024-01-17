@@ -178,8 +178,8 @@ public class loggedInGUI extends JFrame implements ActionListener {
                     break;
                 case 9:
                     insasse = new JButton("<html>" + "<br><&nbsp Insasse: <br><br>" + "<&nbsp ID: number<br> "
-                            + "<&nbsp Vorname: Varchar2<br>" + "<&nbsp Nachname: Varchar2<br>" + "<&nbsp Inhaftierung: Date<br>" + "<&nbsp Entlassung: Date<br>"
-                            + "<&nbsp Geschlecht: Varchar2<br>" + "<&nbsp Geburtsdatum: Date<br>" + "<&nbsp letzter_Wohnort: Varcher2<br>" + "<&nbsp Notiz: Clob<br>"
+                            + "<&nbsp Vorname: Varchar2<br>" + "<&nbsp Nachname: Varchar2<br>" + "<&nbsp Geschlecht: Varchar2<br>"
+                            + "<&nbsp Geburtsdatum: Date<br>" + "<&nbsp letzter_Wohnort: Varcher2<br>" + "<&nbsp Notiz: Clob<br>"
                             + "<&nbsp Sicherheitsstufe: Varchar2" + "<html>");
                     insasse.setFont(insasse.getFont().deriveFont(20.0F));
                     insasse.setHorizontalAlignment(SwingConstants.LEFT);
@@ -236,7 +236,7 @@ public class loggedInGUI extends JFrame implements ActionListener {
                     break;
                 case 15:
                     zelle = new JButton("<html>" + "<br><&nbsp Zelle: <br><br>" + "<&nbsp ID: number<br> " + "<&nbsp Gef_ID: number<br> "
-                            + "<&nbsp Zel_ID: number<br>" + "<&nbsp freie_Plätze: Number<br>" + "<&nbsp Plätze: Number<br>" + "<&nbsp Nummer: Nummer<br>"
+                            + "<&nbsp Zel_ID: number<br>" + "<&nbsp Plätze: Number<br>" + "<&nbsp Nummer: Nummer<br>"
                             + "<&nbsp Fläche: Number<br>" + "<&nbsp Sicherheitsstufe: Varchar2" + "<html>");
                     zelle.setFont(zelle.getFont().deriveFont(20.0F));
                     zelle.setHorizontalAlignment(SwingConstants.LEFT);
