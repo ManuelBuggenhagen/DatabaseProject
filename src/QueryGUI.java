@@ -34,7 +34,7 @@ public class QueryGUI extends JFrame implements ActionListener {
 
     public QueryGUI() {
         setTitle("Query");
-        setSize(800, 1000);
+        setSize(1500, 1000);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -48,7 +48,6 @@ public class QueryGUI extends JFrame implements ActionListener {
         query.setBackground(Color.BLACK);
         queryResult = new JLabel("hier wird ihr Ergebnis stehen", SwingConstants.CENTER);
         queryResult.setFont(queryResult.getFont().deriveFont(20.0F));
-        //scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 
         run = new JButton("run");
@@ -57,7 +56,6 @@ public class QueryGUI extends JFrame implements ActionListener {
         run.setForeground(Color.BLACK);
         run.setBorder(null);
 
-        //final boolean[] hasBeenPressed = {false};
         try {
             Image img = ImageIO.read(new File("src/runButton.png"));
             run.setIcon(new ImageIcon(img));
@@ -69,8 +67,8 @@ public class QueryGUI extends JFrame implements ActionListener {
 
         subPanel3 = new JPanel();
         subPanel3.setLayout(new GridLayout(11, 1));
-        subPanel3.setSize(200,200);
-        subPanel3.setPreferredSize(new Dimension(200,500));
+        subPanel3.setSize(200, 200);
+        subPanel3.setPreferredSize(new Dimension(200, 500));
 
         for (int i = 0; i < 11; i++) {
             switch (i) {
@@ -81,52 +79,52 @@ public class QueryGUI extends JFrame implements ActionListener {
                     subPanel3.add(info);
                     break;
                 case 1:
-                    sql1 = new JButton("häufigste Zwischenfälle");
+                    sql1 = new JButton("<html>" + "<&nbsp häufigste Zwischenfälle" + "<html>");
                     sql1.addActionListener(this);
                     subPanel3.add(sql1);
                     break;
                 case 2:
-                    sql2 = new JButton("Liste aller Insassen in einem Gefängnis");
+                    sql2 = new JButton("<html>" + "<&nbsp Liste aller Insassen in einem <br> <&nbsp Gefängnis" + "<html>");
                     sql2.addActionListener(this);
                     subPanel3.add(sql2);
                     break;
                 case 3:
-                    sql3 = new JButton("3");
+                    sql3 = new JButton("<html>" + "<&nbsp Liste aller Insassen innerhalb <br> <&nbsp eines Gefängnisses" + "<html>");
                     sql3.addActionListener(this);
                     subPanel3.add(sql3);
                     break;
                 case 4:
-                    sql4 = new JButton("4");
+                    sql4 = new JButton("<html>" + "<&nbsp Welche Rollen haben welche <br> <&nbsp Rechte?" + "<html>");
                     sql4.addActionListener(this);
                     subPanel3.add(sql4);
                     break;
                 case 5:
-                    sql5 = new JButton("5");
+                    sql5 = new JButton("<html>" + "<&nbsp Welches Angebot hat die meisten <br> <&nbsp Teilnehmer gehabt?" + "<html>");
                     sql5.addActionListener(this);
                     subPanel3.add(sql5);
                     break;
                 case 6:
-                    sql6 = new JButton("6");
+                    sql6 = new JButton("<html>" + "<&nbsp Wie viele Chefs gibt es und wo <br> <&nbsp arbeiten diese?" + "<html>");
                     sql6.addActionListener(this);
                     subPanel3.add(sql6);
                     break;
                 case 7:
-                    sql7 = new JButton("7");
+                    sql7 = new JButton("<html>" + "<&nbsp Welche Firmen beliefern die <br> <&nbsp JVA Bielefeld?" + "<html>");
                     sql7.addActionListener(this);
                     subPanel3.add(sql7);
                     break;
                 case 8:
-                    sql8 = new JButton("8");
+                    sql8 = new JButton("<html>" + "<&nbsp Wie viel geld haben Gefängnisse <br> <&nbsp im Jahr 2024 ausgegeben?" + "<html>");
                     sql8.addActionListener(this);
                     subPanel3.add(sql8);
                     break;
                 case 9:
-                    sql9 = new JButton("9");
+                    sql9 = new JButton("<html>" + "<&nbsp Welche Firmen liefern aktuell <br> <&nbsp Lebensmittel?" + "<html>");
                     sql9.addActionListener(this);
                     subPanel3.add(sql9);
                     break;
                 case 10:
-                    sql10 = new JButton("10");
+                    sql10 = new JButton("<html>" + "<&nbsp Welche Insassen sind aktuell im <br> <&nbsp Bereich Küche beschäftigt?" + "<html>");
                     sql10.addActionListener(this);
                     subPanel3.add(sql10);
                     break;
@@ -181,41 +179,68 @@ public class QueryGUI extends JFrame implements ActionListener {
                     "     from zwischenfallhistorie a group by versto_ order by Number_of_incidents DESC\n");
 
         } else if (e.getSource() == sql2) {
-            query.setText("SELECT * FROM(\n" +
-                    "SELECT INSASSE.ID, INSASSE.VORNAME, INSASSE.NACHNAME, MAX(INSASSENHISTORIE.DATUM) AS DATUM, INSASSENHISTORIE.ZEL_ID, ROW_NUMBER() OVER (PARTITION BY INSASSE.ID \n" +
-                    "ORDER BY INSASSENHISTORIE.DATUM DESC) AS RANG\n" +
-                    "FROM\n" +
-                    "INSASSENHISTORIE\n" +
-                    "LEFT OUTER JOIN INSASSE ON INSASSE.ID = INSASSENHISTORIE.INS_ID \n" +
-                    "LEFT OUTER JOIN ZELLE on INSASSENHISTORIE.ZEL_ID = ZELLE.ID\n" +
-                    "LEFT OUTER JOIN GEFANGNIS ON ZELLE.GEF_ID = GEFANGNIS.ID\n" +
-                    "WHERE GEFANGNIS.NAME =  'Justizvollzugsanstallt Hameln' OR INSASSENHISTORIE.ZEL_ID IS NULL\n" +
-                    "GROUP BY INSASSE.ID, INSASSE.VORNAME, INSASSE.NACHNAME, INSASSENHISTORIE.DATUM, INSASSENHISTORIE.ZEL_ID\n" +
-                    "ORDER BY INSASSE.ID");
+            query.setText("SELECT COUNT(*) \n" +
+                    "FROM ZELLE \n" +
+                    "LEFT OUTER JOIN GEFANGNIS on GEFANGNIS.id = ZELLE.gef_id \n" +
+                    "WHERE GEFANGNIS.name = 'Justizvollzugsanstalt Bielefeld'");
 
         } else if (e.getSource() == sql3) {
-            query.setText("dfd");
+            query.setText("SELECT * FROM(\n" +
+                    "SELECT INSASSE.id, INSASSE.vorname, INSASSE.nachname, MAX(INSASSENHISTORIE.datum) AS DATUM, INSASSENHISTORIE.zel_id, ROW_NUMBER() OVER (PARTITION BY INSASSE.id \n" +
+                    "ORDER BY INSASSENHISTORIE.datum DESC) AS RANG\n" +
+                    "FROM\n" +
+                    "INSASSENHISTORIE\n" +
+                    "LEFT OUTER JOIN INSASSE ON INSASSE.id = INSASSENHISTORIE.ins_id \n" +
+                    "LEFT OUTER JOIN ZELLE on INSASSENHISTORIE.zel_id = ZELLE.id\n" +
+                    "LEFT OUTER JOIN GEFANGNIS ON ZELLE.gef_id = GEFANGNIS.id\n" +
+                    "WHERE GEFANGNIS.name =  'Justizvollzugsanstalt Hameln' OR INSASSENHISTORIE.zel_id IS NULL\n" +
+                    "GROUP BY INSASSE.id, INSASSE.vorname, INSASSE.nachname, INSASSENHISTORIE.datum, INSASSENHISTORIE.zel_id\n" +
+                    "ORDER BY INSASSE.id\n" +
+                    ") WHERE RANG = 1 AND zel_id IS NOT NULL");
 
         } else if (e.getSource() == sql4) {
-            query.setText("dfd");
+            query.setText("SELECT a.id AS Rollen_ID, a.bezeichnung AS BezeichnungRolle, b.recht_id, c.bezeichnung AS BezeichnungRecht \n" +
+                    "FROM ROLLE a \n" +
+                    "LEFT OUTER JOIN ROLLEN_RECHTE b ON a.id = b.rol_id \n" +
+                    "LEFT OUTER JOIN RECHTE c ON b.recht_id = c.id \n" +
+                    "ORDER BY a.id");
 
         } else if (e.getSource() == sql5) {
-            query.setText("dfd");
+            query.setText("SELECT a.bezeichnung, count(a.bezeichnung) AS Number_of_users \n" +
+                    "from angebot a \n" +
+                    "LEFT OUTER JOIN VERTRAG b ON a.id = b.ang_id \n" +
+                    "LEFT OUTER join INSASSE c ON b.ins_id = c.id \n" +
+                    "GROUP BY a.bezeichnung \n" +
+                    "ORDER BY number_of_users DESC");
 
         } else if (e.getSource() == sql6) {
-            query.setText("dfd");
+            query.setText("SELECT nachname, vorname, GEFANGNIS.name\n" +
+                    "FROM MITARBEITER \n" +
+                    "LEFT OUTER JOIN GEFANGNIS ON GEFANGNIS.id = MITARBEITER.gef_id\n" +
+                    "WHERE mit_id IS NULL");
 
         } else if (e.getSource() == sql7) {
-            query.setText("dfd");
+            query.setText("SELECT FIRMA.firmenname, DIENSTLEISTUNGSVERTRAG.import_export\n" +
+                    "FROM GEFANGNIS \n" +
+                    "LEFT OUTER JOIN GEFANGNIS_DIENSTLEISTUNG ON GEFANGNIS_DIENSTLEISTUNG.gef_id = GEFANGNIS.id\n" +
+                    "LEFT OUTER JOIN DIENSTLEISTUNGSVERTRAG ON DIENSTLEISTUNGSVERTRAG.id = GEFANGNIS_DIENSTLEISTUNG.vertrag_id\n" +
+                    "LEFT OUTER JOIN FIRMA ON FIRMA.id = DIENSTLEISTUNGSVERTRAG.fir_id\n" +
+                    "WHERE GEFANGNIS.name = 'Justizvollzugsanstalt Bielefeld' AND SYSDATE BETWEEN DIENSTLEISTUNGSVERTRAG.beginn AND DIENSTLEISTUNGSVERTRAG.ende\n");
 
         } else if (e.getSource() == sql8) {
-            query.setText("dfd");
+            query.setText("SELECT SUM(ausgaben) AS SummeAusgaben\n" +
+                    "FROM FINANZEN\n" +
+                    "WHERE jahr = 2024 AND die_id IS NULL");
 
         } else if (e.getSource() == sql9) {
-            query.setText("dfd");
+            query.setText("SELECT FIRMA.firmenname, beginn, ende, fir_id\n" +
+                    "FROM DIENSTLEISTUNGSVERTRAG \n" +
+                    "LEFT OUTER JOIN FIRMA ON FIRMA.id = DIENSTLEISTUNGSVERTRAG.fir_id\n" +
+                    "WHERE DIENSTLEISTUNGSVERTRAG.import_export = 'Lebensmittel' AND (SYSDATE BETWEEN DIENSTLEISTUNGSVERTRAG.beginn AND DIENSTLEISTUNGSVERTRAG.ende OR DIENSTLEISTUNGSVERTRAG.ende IS NULL)");
 
         } else if (e.getSource() == sql10) {
-            query.setText("dfd");
+            query.setText("SELECT a.id, a.vorname, a.nachname, c.id AS Angebot_ID, c.bezeichnung, b.beginn, b.ende \n" +
+                    "FROM INSASSE a LEFT OUTER JOIN VERTRAG b on a.id = b.ins_id LEFT OUTER JOIN ANGEBOT c on b.ang_id = c.id where c.bezeichnung = 'Küche' ORDER BY a.id");
 
         }
 
