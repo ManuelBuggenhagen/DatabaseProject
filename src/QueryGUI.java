@@ -32,6 +32,7 @@ public class QueryGUI extends JFrame implements ActionListener {
     JButton sql10;
 
 
+    //Constructor to implement GUI features
     public QueryGUI() {
         setTitle("Query");
         setSize(1500, 1000);
@@ -156,6 +157,7 @@ public class QueryGUI extends JFrame implements ActionListener {
 
     }
 
+    //describes how all the buttons inside the query window work
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == run) {

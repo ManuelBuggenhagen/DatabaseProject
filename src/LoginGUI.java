@@ -13,6 +13,7 @@ public class LoginGUI extends JFrame {
     private String passwordTrue = "verySafePassword!";
     private Container pane = getContentPane();
 
+    //GUI for Login window
     public LoginGUI() {
         setTitle("Die Knasti GmbH");
         setSize(1000, 500);
@@ -80,6 +81,7 @@ public class LoginGUI extends JFrame {
 
     }
 
+    //loads Logo image for the Login window
     private BufferedImage getImage() {
         try {
             BufferedImage logo = ImageIO.read(new File("src/Logo.png"));
@@ -89,6 +91,7 @@ public class LoginGUI extends JFrame {
         }
     }
 
+    //executed when user successfully passes the login =>  opens main GUI window
     public void runLoggedImWindow() {
         EventQueue.invokeLater(new Runnable() {
             @Override

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class SQLRequest {
     private String sql;
 
+    //given a valid sql String, it will return the response from the database inside a JScrollpane object
     public JScrollPane sendSQLRequest(String sql) throws SQLException {
         this.sql = sql;
         String username = "DieKnastiGmbH";

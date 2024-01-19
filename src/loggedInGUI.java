@@ -40,6 +40,7 @@ public class loggedInGUI extends JFrame implements ActionListener {
     Container pane = getContentPane();
     private String currentUser;
 
+    //main GUI window
     public loggedInGUI(String user) {
 
         setTitle("Die Knasti GmbH");
@@ -275,6 +276,7 @@ public class loggedInGUI extends JFrame implements ActionListener {
     }
 
 
+    //Action event for every button inside the main GUI window
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == checkUpdates) {
