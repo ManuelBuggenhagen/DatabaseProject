@@ -9,7 +9,7 @@ import java.io.IOException;
 
 
 public class LoginGUI extends JFrame {
-    public String usernameTrue = "a.merkel@gmail.com";
+    public String usernameTrue = "j.menzel";
     private String passwordTrue = "verySafePassword!";
     private Container pane = getContentPane();
 
@@ -35,7 +35,7 @@ public class LoginGUI extends JFrame {
         JLabel password = new JLabel("Password", SwingConstants.CENTER);
         password.setFont(new Font(Font.DIALOG, Font.BOLD, 22));
 
-        JTextField userField = new JTextField("a.merkel@gmail.com", SwingConstants.CENTER);
+        JTextField userField = new JTextField("j.menzel", SwingConstants.CENTER);
         userField.setFont(new Font(Font.DIALOG, Font.PLAIN, 18));
 
         JPasswordField passwordField = new JPasswordField("verySafePassword!",SwingConstants.CENTER);
