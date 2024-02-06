@@ -412,7 +412,7 @@ public class loggedInGUI extends JFrame implements ActionListener {
             tableShow = new SQLRequest().sendSQLRequest("select * from " + table);
             pane.add(tableShow);
 
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             System.out.println("fehler!");
             JOptionPane.showMessageDialog(getContentPane(), "Die SQL Abfrage war leider fehlerhaft", "error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();

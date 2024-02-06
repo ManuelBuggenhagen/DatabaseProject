@@ -6,8 +6,9 @@ public class SQLRequest {
     private String sql;
 
     //given a valid sql String, it will return the response from the database inside a JScrollpane object
-    public JScrollPane sendSQLRequest(String sql) throws SQLException {
+    public JScrollPane sendSQLRequest(String sql) throws SQLException, ClassNotFoundException {
         this.sql = sql;
+        Class.forName("oracle.jdbc.driver.OracleDriver");
         String username = "DieKnastiGmbH";
         String passwort = "DieKnastiGmbH";
         String url = "jdbc:oracle:thin:@rs03-db-inf-min.ad.fh-bielefeld.de:1521:ORCL";

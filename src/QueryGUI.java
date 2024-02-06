@@ -167,7 +167,7 @@ public class QueryGUI extends JFrame implements ActionListener {
             try {
                 SQLRequest sqlRequest = new SQLRequest();
                 scrollPane = sqlRequest.sendSQLRequest(query.getText());
-            } catch (SQLException ex) {
+            } catch (SQLException | ClassNotFoundException ex ) {
                 System.out.println("fehler!");
                 JOptionPane.showMessageDialog(getContentPane(), "Die SQL Abfrage war leider fehlerhaft", "error", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
