@@ -183,7 +183,7 @@ public class QueryGUI extends JFrame implements ActionListener {
         } else if (e.getSource() == sql2) {
             query.setText("SELECT COUNT(*) \n" +
                     "FROM ZELLE \n" +
-                    "LEFT OUTER JOIN GEFANGNIS on GEFANGNIS.id = ZELLE.gef_id \n" +
+                    "JOIN GEFANGNIS on GEFANGNIS.id = ZELLE.gef_id \n" +
                     "WHERE GEFANGNIS.name = 'Justizvollzugsanstalt Bielefeld'");
 
         } else if (e.getSource() == sql3) {
@@ -192,9 +192,9 @@ public class QueryGUI extends JFrame implements ActionListener {
                     "ORDER BY INSASSENHISTORIE.datum DESC) AS RANG\n" +
                     "FROM\n" +
                     "INSASSENHISTORIE\n" +
-                    "LEFT OUTER JOIN INSASSE ON INSASSE.id = INSASSENHISTORIE.ins_id \n" +
-                    "LEFT OUTER JOIN ZELLE on INSASSENHISTORIE.zel_id = ZELLE.id\n" +
-                    "LEFT OUTER JOIN GEFANGNIS ON ZELLE.gef_id = GEFANGNIS.id\n" +
+                    "JOIN INSASSE ON INSASSE.id = INSASSENHISTORIE.ins_id \n" +
+                    "JOIN ZELLE on INSASSENHISTORIE.zel_id = ZELLE.id\n" +
+                    "JOIN GEFANGNIS ON ZELLE.gef_id = GEFANGNIS.id\n" +
                     "WHERE GEFANGNIS.name =  'Justizvollzugsanstalt Hameln' OR INSASSENHISTORIE.zel_id IS NULL\n" +
                     "GROUP BY INSASSE.id, INSASSE.vorname, INSASSE.nachname, INSASSENHISTORIE.datum, INSASSENHISTORIE.zel_id\n" +
                     "ORDER BY INSASSE.id\n" +
@@ -203,30 +203,30 @@ public class QueryGUI extends JFrame implements ActionListener {
         } else if (e.getSource() == sql4) {
             query.setText("SELECT a.id AS Rollen_ID, a.bezeichnung AS BezeichnungRolle, b.recht_id, c.bezeichnung AS BezeichnungRecht \n" +
                     "FROM ROLLE a \n" +
-                    "LEFT OUTER JOIN ROLLEN_RECHTE b ON a.id = b.rol_id \n" +
-                    "LEFT OUTER JOIN RECHTE c ON b.recht_id = c.id \n" +
+                    "JOIN ROLLEN_RECHTE b ON a.id = b.rol_id \n" +
+                    "JOIN RECHTE c ON b.recht_id = c.id \n" +
                     "ORDER BY a.id");
 
         } else if (e.getSource() == sql5) {
             query.setText("SELECT a.bezeichnung, count(a.bezeichnung) AS Number_of_users \n" +
                     "from angebot a \n" +
-                    "LEFT OUTER JOIN VERTRAG b ON a.id = b.ang_id \n" +
-                    "LEFT OUTER join INSASSE c ON b.ins_id = c.id \n" +
+                    "JOIN VERTRAG b ON a.id = b.ang_id \n" +
+                    "join INSASSE c ON b.ins_id = c.id \n" +
                     "GROUP BY a.bezeichnung \n" +
                     "ORDER BY number_of_users DESC");
 
         } else if (e.getSource() == sql6) {
             query.setText("SELECT nachname, vorname, GEFANGNIS.name\n" +
                     "FROM MITARBEITER \n" +
-                    "LEFT OUTER JOIN GEFANGNIS ON GEFANGNIS.id = MITARBEITER.gef_id\n" +
+                    "JOIN GEFANGNIS ON GEFANGNIS.id = MITARBEITER.gef_id\n" +
                     "WHERE mit_id IS NULL");
 
         } else if (e.getSource() == sql7) {
             query.setText("SELECT FIRMA.firmenname, DIENSTLEISTUNGSVERTRAG.import_export\n" +
                     "FROM GEFANGNIS \n" +
-                    "LEFT OUTER JOIN GEFANGNIS_DIENSTLEISTUNG ON GEFANGNIS_DIENSTLEISTUNG.gef_id = GEFANGNIS.id\n" +
-                    "LEFT OUTER JOIN DIENSTLEISTUNGSVERTRAG ON DIENSTLEISTUNGSVERTRAG.id = GEFANGNIS_DIENSTLEISTUNG.vertrag_id\n" +
-                    "LEFT OUTER JOIN FIRMA ON FIRMA.id = DIENSTLEISTUNGSVERTRAG.fir_id\n" +
+                    "JOIN GEFANGNIS_DIENSTLEISTUNG ON GEFANGNIS_DIENSTLEISTUNG.gef_id = GEFANGNIS.id\n" +
+                    "JOIN DIENSTLEISTUNGSVERTRAG ON DIENSTLEISTUNGSVERTRAG.id = GEFANGNIS_DIENSTLEISTUNG.vertrag_id\n" +
+                    "JOIN FIRMA ON FIRMA.id = DIENSTLEISTUNGSVERTRAG.fir_id\n" +
                     "WHERE GEFANGNIS.name = 'Justizvollzugsanstalt Bielefeld' AND SYSDATE BETWEEN DIENSTLEISTUNGSVERTRAG.beginn AND DIENSTLEISTUNGSVERTRAG.ende\n");
 
         } else if (e.getSource() == sql8) {
@@ -237,12 +237,12 @@ public class QueryGUI extends JFrame implements ActionListener {
         } else if (e.getSource() == sql9) {
             query.setText("SELECT FIRMA.firmenname, beginn, ende, fir_id\n" +
                     "FROM DIENSTLEISTUNGSVERTRAG \n" +
-                    "LEFT OUTER JOIN FIRMA ON FIRMA.id = DIENSTLEISTUNGSVERTRAG.fir_id\n" +
+                    "JOIN FIRMA ON FIRMA.id = DIENSTLEISTUNGSVERTRAG.fir_id\n" +
                     "WHERE DIENSTLEISTUNGSVERTRAG.import_export = 'Lebensmittel' AND (SYSDATE BETWEEN DIENSTLEISTUNGSVERTRAG.beginn AND DIENSTLEISTUNGSVERTRAG.ende OR DIENSTLEISTUNGSVERTRAG.ende IS NULL)");
 
         } else if (e.getSource() == sql10) {
             query.setText("SELECT a.id, a.vorname, a.nachname, c.id AS Angebot_ID, c.bezeichnung, b.beginn, b.ende \n" +
-                    "FROM INSASSE a LEFT OUTER JOIN VERTRAG b on a.id = b.ins_id LEFT OUTER JOIN ANGEBOT c on b.ang_id = c.id where c.bezeichnung = 'Küche' ORDER BY a.id");
+                    "FROM INSASSE a JOIN VERTRAG b on a.id = b.ins_id LEFT OUTER JOIN ANGEBOT c on b.ang_id = c.id where c.bezeichnung = 'Küche' ORDER BY a.id");
 
         }
 
